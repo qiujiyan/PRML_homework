@@ -1,7 +1,10 @@
 from ucimlrepo import fetch_ucirepo 
 from sklearn.model_selection import train_test_split
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis,QuadraticDiscriminantAnalysis
+from discriminantanalysis import DiscriminentAnalysis
 
+from KDEClassifier import KDEClassifier
+from MQDFClassifier import MQDFClassifier
 
 
 def get_dataset(dataset_name):
@@ -16,8 +19,12 @@ def get_dataset(dataset_name):
     '''
 
     dataset_dic = {
-        "heart_disease":45,
         "breast_cancer_wisconsin_diagnostic":17,
+        "iris":53,
+        "wine":109,
+        'breast_cancer_wisconsin_original' :15,
+        'automobile' :10,
+        'ionosphere' :46,
     }
     _id = -1 
     
@@ -58,7 +65,7 @@ def format_dataset(uci_dataset):
     
     return uci_dataset
         
-def build(mod_name):
+def build(mod_name,**kwarg):
     """build a model by name
 
     Args:
@@ -69,9 +76,17 @@ def build(mod_name):
         clf: a class which have fit(X, y) and predict(X)
     """
     
-    if mod_name == "LDA" or  mod_name == "LDF":
+    if mod_name in ["LDA", "LDF"]:
         return LinearDiscriminantAnalysis()
-    if mod_name == "QDA" or  mod_name == "QDF":
+    if mod_name in ["QDA", "QDF"]:
         return QuadraticDiscriminantAnalysis()
-    
+    if "RDA" in mod_name   or "RDF" in mod_name :
+        alpha = float(mod_name.split("_")[1])
+        return DiscriminentAnalysis(alpha = alpha)
+    if "KDE" in mod_name   or "KW" in mod_name:
+        b = float(mod_name.split("_")[1])
+        return KDEClassifier(bandwidth=b)
+    if "MQD" in mod_name:
+        delta = float(mod_name.split("_")[1])
+        return MQDFClassifier(delta=delta)
     raise "model name not found"
