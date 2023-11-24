@@ -36,7 +36,7 @@ def get_dataset(dataset_name):
     
     return fetch_ucirepo(id=_id)
      
-def split_dataset(uci_dataset,_test_size=0.33):
+def split_dataset(uci_dataset,_test_size=0.33,random_state=42):
     '''split_dataset
     
     Args:
@@ -49,7 +49,7 @@ def split_dataset(uci_dataset,_test_size=0.33):
 
     X = uci_dataset.data.features 
     y = uci_dataset.data.targets 
-    return train_test_split( X, y, test_size=_test_size, random_state=42)    
+    return train_test_split( X, y, test_size=_test_size, random_state=random_state)    
     
 def format_dataset(uci_dataset):
     """format dataset, include fill nan, to numpy, reshape
